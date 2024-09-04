@@ -76,3 +76,18 @@ FROM
 GROUP BY order_items.product_id
 ```
 
+## 3. Задание
+
+```SQL
+SELECT 
+  SUM (
+    CASE WHEN status = "Отменён" THEN 1 ELSE 0
+  ) / COUNT(*) * 100 as percent 
+FROM 
+  orders 
+WHERE 
+  order_date >= date_trunc(
+    'month', current_date - interval '3' month
+  ) 
+  AND order_date < date_trunc('month', current_date)
+```
