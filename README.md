@@ -91,3 +91,35 @@ WHERE
   ) 
   AND order_date < date_trunc('month', current_date)
 ```
+
+## 4. Задание 
+```SQL
+SELECT 'orders' as table, 'order_id' as column, 'Заказ без товаров' as reason FROM orders
+	LEFT JOIN order_items ON orders.order_id = order_items.order_id
+    WHERE order_items.order_id IS NULL
+UNION
+SELECT 'order_items' as table, 'order_id' as column, 'Товар без заказов' as reason FROM orders
+	RIGHT JOIN order_items ON orders.order_id = order_items.order_id
+    WHERE orders.order_id IS NULL
+UNION
+SELECT 'orders' as table, 'customer_id' as column, 'У заказа отсутсвует клиент' as reason FROM orders 
+    WHERE orders.customer_id IS NULL
+UNION
+SELECT 'order_items' as table, 'product_id' as column, 'У заказа не указан товар' as reason FROM order_items 
+    WHERE order_items.product_id IS NULL
+UNION
+SELECT 'orders' as table, 'order_date' as column, 'Заказ из будущего' as reason FROM orders
+    WHERE orders.order_date > CURRENT_DATE
+UNION
+SELECT 'orders' as table, 'status' as column, 'Некорректное значение статуса заказа' as reason FROM orders
+    WHERE orders.status = "" OR orders.status IS NULL
+UNION
+SELECT 'order_items' as table, 'quantity' as column, 'Некорректное значение кол-ва товара' as reason FROM order_items 
+    WHERE order_items.quantity < 0 OR order_items.quantity is NULL
+UNION
+SELECT 'order_items' as table, 'price' as column, 'Некорректное значение цены за единицу товара' as reason FROM order_items 
+    WHERE order_items.quantity < 0 OR order_items.quantity is NULL
+UNION
+SELECT 'orders' as table, 'order_date' as column, 'У заказа отсутсвует дата заказа' as reason FROM orders 
+    WHERE orders.order_date IS NULL
+```
