@@ -81,7 +81,7 @@ GROUP BY order_items.product_id
 ```SQL
 SELECT 
   SUM (
-    CASE WHEN status = "Отменён" THEN 1 ELSE 0
+    CASE WHEN status = "Отменён" THEN 1 ELSE 0 END
   ) / COUNT(*) * 100 as percent 
 FROM 
   orders 
