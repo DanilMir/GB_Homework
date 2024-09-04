@@ -59,16 +59,21 @@ HAVING
 ```SQL
 SELECT 
   orders.order_id, 
-  SUM(quantity) as quantity, 
-  SUM(price * quantity) as amount 
+  SUM(
+    CASE WHEN orders.order_date >= date_trunc(
+      'month', current_date - interval '1' month
+    ) 
+    AND orders.order_date < date_trunc('month', current_date) THEN quantity ELSE 0 END
+  ) AS quantity, 
+  SUM(
+    CASE WHEN orders.order_date >= date_trunc(
+      'month', current_date - interval '1' month
+    ) 
+    AND orders.order_date < date_trunc('month', current_date) THEN quantity * price ELSE 0 END
+  ) AS amount 
 FROM 
   order_items 
   JOIN order ON order_items.order_id = orders.order_id 
-WHERE 
-  orders.order_date >= date_trunc(
-    'month', current_date - interval '1' month
-  ) 
-  AND orders.order_date < date_trunc('month', current_date) 
 GROUP BY 
   order_items.product_id
 ```
