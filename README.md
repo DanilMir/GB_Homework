@@ -112,7 +112,7 @@ SELECT 'orders' as table, 'order_date' as column, 'Заказ из будуще�
     WHERE orders.order_date > CURRENT_DATE
 UNION
 SELECT 'orders' as table, 'status' as column, 'Некорректное значение статуса заказа' as reason FROM orders
-    WHERE orders.status = "" OR orders.status IS NULL
+    WHERE (orders.status = '') IS NOT FALSE
 UNION
 SELECT 'order_items' as table, 'quantity' as column, 'Некорректное значение кол-ва товара' as reason FROM order_items 
     WHERE order_items.quantity < 0 OR order_items.quantity is NULL
